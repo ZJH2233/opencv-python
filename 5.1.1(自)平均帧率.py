@@ -1,7 +1,12 @@
 import numpy as np
 import cv2
+import sys
 
-cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture('v4l2src device=/dev/video3 ! mppvideodec ! rkximagesink sync=false ! videoconvert !appsink',cv2.CAP_GSTREAMER)
+cap =  cv2.VideoCapture(0)
+if(cap.isOpened()!=True):
+    print("open camera error")
+    sys.exit()
 ret1 = cap.set(3,1280)     #修改分辨率  高宽     实验后发现不同分辨率会影响帧率FPS，opencv的设置至少对于usb摄像头来说是真的改变了摄像头采集大小即低分辨率时可以加快速度，而不是都是采集1920*1080然后裁剪成680*420给你
 ret2 = cap.set(4,1024)
 a=cap.get(3)       #查看分辨率
@@ -38,7 +43,7 @@ while(True):
     #     fpstmp += fps/2
     #     print(fpstmp)
     #     cnt -=1
-    if cv2.waitKey(1) & 0xFF == ord('q'):   #这东西意外的影响速率啊 没有这句话fps稳定有fps有时会高不少
+    if cv2.waitKey(1)  == ord('q'):   #这东西意外的影响速率啊 没有这句话fps稳定有fps有时会高不少
         break
 # When everything done, release the capture
 cap.release()
